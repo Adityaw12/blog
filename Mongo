@@ -1,0 +1,94 @@
+test> use practice
+switched to db practice
+practice> db.createCollection("mycollection")
+{ ok: 1 }
+practice> db.mycollection.insertOne({'Book':'wings of fire' , 'author':'aditya'})
+{
+  acknowledged: true,
+  insertedId: ObjectId("644aaae841231acb465ca098")
+}
+practice> db.mycollection.find(
+... )
+[
+  {
+    _id: ObjectId("644aaae841231acb465ca098"),
+    Book: 'wings of fire',
+    author: 'aditya'
+  }
+]
+
+practice> db.mycollection.insertOne({'Book':'wings of love' , 'author':'anurag'})
+{
+  acknowledged: true,
+  insertedId: ObjectId("644aab5041231acb465ca099")
+}
+practice> db.mycollection.insertMany([{'Book':'love' , 'author':'chaman'},{'Book':'Luster','author':'Bhim'}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("644aab9941231acb465ca09a"),
+    '1': ObjectId("644aab9941231acb465ca09b")
+  }
+}
+practice> db.mycollection.find()
+[
+  {
+    _id: ObjectId("644aaae841231acb465ca098"),
+    Book: 'wings of fire',
+    author: 'aditya'
+  },
+  {
+    _id: ObjectId("644aab5041231acb465ca099"),
+    Book: 'wings of love',
+    author: 'anurag'
+  },
+  {
+    _id: ObjectId("644aab9941231acb465ca09a"),
+    Book: 'love',
+    author: 'chaman'
+  },
+  {
+    _id: ObjectId("644aab9941231acb465ca09b"),
+    Book: 'Luster',
+    author: 'Bhim'
+  }
+]
+practice> db.mycollection.update({'Book':'love'},{$set:{'author':'sweet'}}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:64)
+
+> 1 | db.mycollection.update({'Book':'love'},{$set:{'author':'sweet'}}})
+    |                                                                 ^
+  2 |
+
+practice> db.mycollection.update({'Book':'love'},{$set:{'author':'sweet'}})
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+practice> db.mycollection.remove({'Book':'Luster'})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+practice> db.createRole({
+...   role: "myrole",
+...   privileges: [
+...     {
+...       resource: { db: "mydatabase", collection: "mycollection" },
+...       actions: [ "find", "listIndexes" ]
+...     }
+...   ],
+...   roles: []
+... })
+MongoServerError: Roles on the 'practice' database cannot be granted privileges that target other databases or the cluster
+practice> db.createRole({ role: "myrole", privileges: [ { resource: { db: "practice", collection: "mycollection" }, actions: ["find", "listIndexes"] }], roles: [] })
+{ ok: 1 }
+practice> db.dropRole("myrole")
+{ ok: 1 }
+practice> 
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+practice> .exit
+adityadilipkumarwagh@Adityas-Air ~ % 
